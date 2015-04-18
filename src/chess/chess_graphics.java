@@ -9,9 +9,9 @@ import processing.core.*;
 
 public class chess_graphics extends PApplet {
 	private PImage[][] pieces = new PImage[8][8];
-	int sqDim = 50;
-	int winWidth = 8*sqDim + 400;
-	int winHeight = 8*sqDim + 100;
+	private int sqDim = 50; // the dimensions of each square; depends on image dimensions
+	private int winWidth = 8*sqDim + 400; // the width of the window
+	private int winHeight = 8*sqDim + 100; // the height of the window
 	
 	public void setup() {
 		size(winWidth, winHeight);
