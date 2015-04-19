@@ -19,7 +19,7 @@ public class Test extends JFrame{
 		// this is all testing stuff for now
 		Test test = new Test();
 		// TODO remove test piece once we're done with it
-		chess_piece testPiece = new chess_piece("rook", 0);
+		chess_piece testPiece = new chess_piece("bishop", 0);
 		test.add_piece(testPiece, 0, 0); 
 	}
 	
@@ -147,10 +147,9 @@ public class Test extends JFrame{
 						}
 					}
 					
-					// TODO
+					// TODO diagonal capture?
 					break;
 				case "rook":
-					// TODO
 					for (int x = col+1; x < 8; x++) {
 						if (getPieceAt(x, row) != null && getPieceAt(x, row).get_color() == color) {
 							break;
@@ -192,7 +191,64 @@ public class Test extends JFrame{
 					// TODO
 					break;
 				case "bishop":
-					// TODO
+					int i = 1;
+					while (true) { // will break out
+						if(col+i >= 8 || row+i >= 8) {
+							break;
+						}
+						if(getPieceAt(col+i, row+i) != null && getPieceAt(col+i, row+i).get_color() == color) {
+							break;
+						}
+						threatenSquare(col+i, row+i);
+						if (getPieceAt(col+i, row+i) != null) {
+							System.out.println("there is a piece there");
+							break;
+						}
+						i++;
+					}
+					i = 1;
+					while (true) {
+						if(col-i < 0 || row-i < 0) {
+							break;
+						}
+						if(getPieceAt(col-i, row-i) != null && getPieceAt(col-i, row-i).get_color() == color) {
+							break;
+						}
+						threatenSquare(col-i, row-i);
+						if (getPieceAt(col-i, row-i) != null) {
+							break;
+						}
+						i++;
+					}
+					i = 1;
+					while (true) {
+						System.out.println("col-1=" + (col-1) + " row+i=" + row+1);
+						if(col-1 < 0 || row+i >= 8) {
+							break;
+						}
+						if(getPieceAt(col-i, row+i) != null && getPieceAt(col-i, row+i).get_color() == color) {
+							break;
+						}
+						threatenSquare(col-i, row+i);
+						if (getPieceAt(col-i, row+i) != null) {
+							break;
+						}
+						i++;
+					}
+					i = 1;
+					while (true) {
+						if(col+i >= 8 || row-i < 0) {
+							break;
+						}
+						if(getPieceAt(col+i, row-i) != null && getPieceAt(col+i, row-i).get_color() == color) {
+							break;
+						}
+						threatenSquare(col+i, row-i);
+						if (getPieceAt(col+i, row-i) != null) {
+							break;
+						}
+						i++;
+					}
 					break;
 				case "king":
 					// TODO
