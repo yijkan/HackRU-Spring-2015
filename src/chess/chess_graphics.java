@@ -9,6 +9,7 @@ import processing.core.*;
 
 public class chess_graphics extends PApplet {
 	private PImage[][] pieces = new PImage[8][8];
+	private boolean[][] threatened = new boolean[8][8];
 	private int sqDim = 50; // the dimensions of each square; depends on image dimensions
 	private int winWidth = 8*sqDim + 400; // the width of the window
 	private int winHeight = 8*sqDim + 100; // the height of the window
@@ -49,6 +50,16 @@ public class chess_graphics extends PApplet {
 			for (int y = 75; y <= winHeight - 75; y += sqDim * 2) {
 				rect(x,y,sqDim,sqDim);
 				rect(x-sqDim,y+sqDim,sqDim,sqDim);
+			}
+		}
+		
+		//draw threatened squares
+		fill(128);
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				if(threatened[x][y]) {
+					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
+				}
 			}
 		}
 		
@@ -100,10 +111,21 @@ public class chess_graphics extends PApplet {
 		pieces[col][row] = null;
 	}
 	
+	public void threatenSquare(int col, int row) {
+		threatened[col][row] = true;
+	}
+	
+	public void clearThreat() {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				threatened[x][y] = false;
+			}
+		}
+	}
+	
 	public void highlightSquare(int col, int row) {
 		highlightedX = col;
 		highlightedY = row;
-		System.out.println("X highlighted: " + col + "\nY highlighted: " + row);
 	}
 	
 	public void unhighlightSquare() {
