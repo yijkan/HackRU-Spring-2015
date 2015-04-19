@@ -50,14 +50,16 @@ public class chess_graphics extends PApplet {
 				}
 			}
 		}
-//		trying to found out where to put pictures
+		
+//		trying to find out where to put pictures
 //		PImage i = loadImage("images/test.png");
 //		image (i, 200, 75);
 	}
 	
 	public void add_piece(chess_piece piece, int col, int row) {
 		String type = piece.get_piece_type();
-		pieces[col][row] = loadImage("images/" + type + ".png");
+		String color = piece.get_color();
+		pieces[col][row] = loadImage("images/" + color + "-" + type + ".png");
 	}
 	
 	public void move_piece(int col1, int row1, int col2, int row2) {
