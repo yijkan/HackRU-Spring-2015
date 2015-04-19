@@ -14,6 +14,14 @@ public class chess_graphics extends PApplet {
 	private int winHeight = 8*sqDim + 100; // the height of the window
 	private int highlightedX = 10000; // off screen
 	private int highlightedY = 10000; // off screen
+	private int status = -1; 
+	/*
+	 * -1 means nothing
+	 * 0 means white in check
+	 * 1 means black in check
+	 * 2 means white victory
+	 * 3 means black victory
+	 */
 	
 	public void setup() {
 		size(winWidth, winHeight);
@@ -58,14 +66,29 @@ public class chess_graphics extends PApplet {
 		}
 		
 //		trying to find out where to put pictures
-//		PImage i = loadImage("blacktest.png");
+//		PImage i = loadImage("test1.png");
 //		image (i, 200, 75);
+		
+		// status message
+		String mess = "";
+		if(status == 0) {
+			mess = "The white king is in check!";
+		} else if (status == 1) {
+			mess = "The black king is in check!";
+		} else if (status == 2) {
+			mess = "White wins!";
+		} else if (status == 3) {
+			mess = "Black wins!";
+		}
+		fill(255,0,0);
+		textSize(20);
+		text(mess, 650, 400);
 	}
 	
 	public void add_piece(chess_piece piece, int col, int row) {
 		String type = piece.get_piece_type();
-		String color = piece.get_color();
-		pieces[col][row] = loadImage(color + type + ".png");
+		int color = piece.get_color();
+		pieces[col][row] = loadImage(type + color + ".png");
 	}
 	
 	public void move_piece(int col1, int row1, int col2, int row2) {
@@ -86,5 +109,21 @@ public class chess_graphics extends PApplet {
 	public void unhighlightSquare() {
 		highlightedX = 10000;
 		highlightedY = 10000;
+	}
+	
+	public void whiteInCheck() {
+		status = 0;
+	}
+	
+	public void blackInCheck() {
+		status = 1;
+	}
+	
+	public void whiteWins() {
+		status = 2;
+	}
+	
+	public void blackWins() {
+		status = 3;
 	}
 }
