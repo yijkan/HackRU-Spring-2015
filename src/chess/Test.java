@@ -8,7 +8,9 @@ import javax.swing.*;
 public class Test extends JFrame{
 	private chess_graphics boardImage;
 	private chess_piece[][] pieces = new chess_piece[8][8];
-	private boolean[][] threatened = new boolean[8][8]; // if a specific piece can move here OR if any piece can move here 
+	private boolean[][] canMove = new boolean[8][8]; // if a specific piece can move here OR if any piece can move here
+	private boolean[][] whiteInCheck = new boolean[8][8];
+	private boolean[][] blackInCheck = new boolean[8][8];
 	private boolean playing = false; // false before/after gameplay
 	private int turns; // use mod 2 to figure out whose turn it is. 0 for white, 1 for black
 	private boolean pieceSelected; 
@@ -19,8 +21,8 @@ public class Test extends JFrame{
 		// this is all testing stuff for now
 		Test test = new Test();
 		// TODO remove test piece once we're done with it
-		chess_piece testPiece = new chess_piece("bishop", 0);
-		test.add_piece(testPiece, 0, 0); 
+//		chess_piece testPiece = new chess_piece("bishop", 0);
+//		test.add_piece(testPiece, 0, 0); 
 	}
 	
 	public Test() {
@@ -42,27 +44,27 @@ public class Test extends JFrame{
 				
 				if (xCord < 0 || yCord < 0 || xCord >= 8 || yCord >= 8) { // you clicked outside the board
 					deselectSquare();
-					System.out.println("Clicked outside board - Piece deselected");
+//					System.out.println("Clicked outside board - Piece deselected");
 				} else { // you clicked inside the board
 					if (getPieceAt(xCord,yCord) != null && getPieceAt(xCord,yCord).get_color() == turns%2) { // you clicked on your piece
 						deselectSquare(); // in case one was selected before. Does nothing if it wasn't
 						selectSquare(xCord,yCord);
-						System.out.println("Piece selected");
+//						System.out.println("Piece selected");
 					} else { // there is no piece or it's an enemy piece
 						if(pieceSelected) {
-							if (threatened[xCord][yCord]) { // you can move there
+							if (canMove[xCord][yCord]) { // you can move there
 								getPieceAt(selectedCol, selectedRow).set_moved(true);
 								move_piece(selectedCol, selectedRow, xCord, yCord);
-								System.out.println("Piece moved");
+//								System.out.println("Piece moved");
 								endMove();
-								System.out.println("Turn ended");
+//								System.out.println("Turn ended");
 							} else { // you can't move there
 								deselectSquare(); // deselect the previously selected square
-								System.out.println("Can't move there - Piece deselected");
+//								System.out.println("Can't move there - Piece deselected");
 							}
 						} else {
 							// nothing: you can't select your enemy's piece
-							System.out.println("Select your OWN piece");
+//							System.out.println("Select your OWN piece");
 						}
 					}
 				}
@@ -82,29 +84,29 @@ public class Test extends JFrame{
 		turns = 0;
 		
 		// add all initial pieces - comment out when testing
-//		add_piece(new chess_piece("rook", 0), 0, 0); // white rook
-//		add_piece(new chess_piece("knight", 0), 0, 1); // white knight
-//		add_piece(new chess_piece("bishop", 0), 0, 2); // white bishop
-//		add_piece(new chess_piece("queen", 0), 0, 3); // white queen
-//		add_piece(new chess_piece("king", 0), 0, 4); // white king
-//		add_piece(new chess_piece("bishop", 0), 0, 5); // white bishop
-//		add_piece(new chess_piece("knight", 0), 0, 6); // white knight
-//		add_piece(new chess_piece("rook", 0), 0, 7); // white rook
-//		for (int y = 0; y < 8; y++) {
-//			add_piece(new chess_piece("pawn", 0), 1, y); // white pawns
-//		}
-//		
-//		add_piece(new chess_piece("rook", 1), 8, 0); // black rook
-//		add_piece(new chess_piece("knight", 1), 8, 1); // black knight
-//		add_piece(new chess_piece("bishop", 1), 8, 2); // black bishop
-//		add_piece(new chess_piece("queen", 1), 8, 3); // black queen
-//		add_piece(new chess_piece("king", 1), 8, 4); // black king
-//		add_piece(new chess_piece("bishop", 1), 8, 5); // black bishop
-//		add_piece(new chess_piece("knight", 1), 8, 6); // black knight
-//		add_piece(new chess_piece("rook", 1), 8, 7); // black rook
-//		for (int y = 0; y < 8; y++) {
-//			add_piece(new chess_piece("pawn", 1), 7, y); // black pawns
-//		}
+		add_piece(new chess_piece("rook", 0), 0, 0); // white rook
+		add_piece(new chess_piece("knight", 0), 0, 1); // white knight
+		add_piece(new chess_piece("bishop", 0), 0, 2); // white bishop
+		add_piece(new chess_piece("queen", 0), 0, 3); // white queen
+		add_piece(new chess_piece("king", 0), 0, 4); // white king
+		add_piece(new chess_piece("bishop", 0), 0, 5); // white bishop
+		add_piece(new chess_piece("knight", 0), 0, 6); // white knight
+		add_piece(new chess_piece("rook", 0), 0, 7); // white rook
+		for (int y = 0; y < 8; y++) {
+			add_piece(new chess_piece("pawn", 0), 1, y); // white pawns
+		}
+		
+		add_piece(new chess_piece("rook", 1), 7, 0); // black rook
+		add_piece(new chess_piece("knight", 1), 7, 1); // black knight
+		add_piece(new chess_piece("bishop", 1), 7, 2); // black bishop
+		add_piece(new chess_piece("queen", 1), 7, 3); // black queen
+		add_piece(new chess_piece("king", 1), 7, 4); // black king
+		add_piece(new chess_piece("bishop", 1), 7, 5); // black bishop
+		add_piece(new chess_piece("knight", 1), 7, 6); // black knight
+		add_piece(new chess_piece("rook", 1), 7, 7); // black rook
+		for (int y = 0; y < 8; y++) {
+			add_piece(new chess_piece("pawn", 1), 6, y); // black pawns
+		}
 	}
 	
 	public chess_graphics getBoard() {
@@ -118,31 +120,35 @@ public class Test extends JFrame{
 	public void calculateMovesFrom(int col, int row) {
 		if(getPieceAt(col, row) != null) {
 			String type = getPieceAt(col, row).get_piece_type();
-			System.out.println(type);
+//			System.out.println(type);
 			int color = getPieceAt(col, row).get_color();
 			
 			switch(type) {
 				case "pawn":
 					if(color == 0) {
-						for (int y = 0; y < 8; y++) {
-							if(col < 7) {
-								threatenSquare(col+1, y);
-							}
+						if(col+1 < 8 && row+1 < 8 && getPieceAt(col+1,row+1) != null && getPieceAt(col+1,row+1).get_color() == 1) {
+							canMoveToSquare(col+1,row+1);
 						}
-						if(!getPieceAt(col,row).get_moved()) {
-							for (int y = 0; y < 8; y++) {
-								threatenSquare(col+2, y);
+						if(col+1 < 8 && row-1 >= 0 && getPieceAt(col+1,row-1) != null && getPieceAt(col+1,row-1).get_color() == 1) {
+							canMoveToSquare(col+1,row-1);
+						}
+						if(col+1 < 8 && getPieceAt(col+1,row) == null) {
+							canMoveToSquare(col+1, row);
+							if(!getPieceAt(col,row).get_moved()) {
+								canMoveToSquare(col+2, row);
 							}
 						}
 					} else {
-						for (int y = 0; y < 8; y++) {
-							if(col > 0) {
-								threatenSquare(col-1, y);
-							}
+						if(col-1 >= 0 && row+1 < 8 && getPieceAt(col-1,row+1) != null && getPieceAt(col-1,row+1).get_color() == 0) {
+							canMoveToSquare(col-1,row+1);
 						}
-						if(!getPieceAt(col,row).get_moved()) {
-							for (int y = 0; y < 8; y++) {
-								threatenSquare(col-2, y);
+						if(col-1 >= 0 && row-1 >= 0 && getPieceAt(col-1,row-1) != null && getPieceAt(col-1,row-1).get_color() == 0) {
+							canMoveToSquare(col-1,row-1);
+						}
+						if(col-1 >= 0 && getPieceAt(col-1,row) == null) {
+							canMoveToSquare(col-1, row);
+							if(!getPieceAt(col,row).get_moved()) {
+								canMoveToSquare(col-2, row);
 							}
 						}
 					}
@@ -154,7 +160,7 @@ public class Test extends JFrame{
 						if (getPieceAt(x, row) != null && getPieceAt(x, row).get_color() == color) {
 							break;
 						}
-						threatenSquare(x, row);
+						canMoveToSquare(x, row);
 						if (getPieceAt(x, row) != null) {
 							break;
 						}
@@ -163,7 +169,7 @@ public class Test extends JFrame{
 						if (getPieceAt(col,y) != null && getPieceAt(col,y).get_color() == color) {
 							break;
 						}
-						threatenSquare(col,y);
+						canMoveToSquare(col,y);
 						if (getPieceAt(col,y) != null) {
 							break;
 						}
@@ -172,7 +178,7 @@ public class Test extends JFrame{
 						if (getPieceAt(x, row) != null && getPieceAt(x, row).get_color() == color) {
 							break;
 						}
-						threatenSquare(x, row);
+						canMoveToSquare(x, row);
 						if (getPieceAt(x, row) != null) {
 							break;
 						}
@@ -181,7 +187,7 @@ public class Test extends JFrame{
 						if (getPieceAt(col,y) != null && getPieceAt(col,y).get_color() == color) {
 							break;
 						}
-						threatenSquare(col,y);
+						canMoveToSquare(col,y);
 						if (getPieceAt(col,y) != null) {
 							break;
 						}
@@ -199,9 +205,8 @@ public class Test extends JFrame{
 						if(getPieceAt(col+i, row+i) != null && getPieceAt(col+i, row+i).get_color() == color) {
 							break;
 						}
-						threatenSquare(col+i, row+i);
+						canMoveToSquare(col+i, row+i);
 						if (getPieceAt(col+i, row+i) != null) {
-							System.out.println("there is a piece there");
 							break;
 						}
 						i++;
@@ -214,7 +219,7 @@ public class Test extends JFrame{
 						if(getPieceAt(col-i, row-i) != null && getPieceAt(col-i, row-i).get_color() == color) {
 							break;
 						}
-						threatenSquare(col-i, row-i);
+						canMoveToSquare(col-i, row-i);
 						if (getPieceAt(col-i, row-i) != null) {
 							break;
 						}
@@ -222,14 +227,13 @@ public class Test extends JFrame{
 					}
 					i = 1;
 					while (true) {
-						System.out.println("col-1=" + (col-1) + " row+i=" + row+1);
-						if(col-1 < 0 || row+i >= 8) {
+						if((col-i) < 0 || (row+i) >= 8) {
 							break;
 						}
 						if(getPieceAt(col-i, row+i) != null && getPieceAt(col-i, row+i).get_color() == color) {
 							break;
 						}
-						threatenSquare(col-i, row+i);
+						canMoveToSquare(col-i, row+i);
 						if (getPieceAt(col-i, row+i) != null) {
 							break;
 						}
@@ -243,7 +247,7 @@ public class Test extends JFrame{
 						if(getPieceAt(col+i, row-i) != null && getPieceAt(col+i, row-i).get_color() == color) {
 							break;
 						}
-						threatenSquare(col+i, row-i);
+						canMoveToSquare(col+i, row-i);
 						if (getPieceAt(col+i, row-i) != null) {
 							break;
 						}
@@ -252,23 +256,30 @@ public class Test extends JFrame{
 					break;
 				case "king":
 					// TODO
+					calculateAllCaptures((color+1)%2);
 					for (int x = -1; x <= 1; x++) {
 						for (int y = -1; y <=1; y++) {
-							if (getPieceAt(x,y).get_color() == color) { // don't select squares with pieces of the same color
+							if (col+x >= 8 || row+y >= 8 || col+x < 0 || row+y < 0) { // don't got outside board
 								continue;
 							}
-							threatenSquare(col+x, row+y);
+							if (getPieceAt(col+x,row+y) != null && getPieceAt(col+x,row+y).get_color() == color) { // don't select squares with pieces of the same color
+								continue;
+							}
+							if (color == 0 && whiteInCheck[col+x][row+y] || color == 1 && blackInCheck[col+x][row+y]) {
+								continue;
+							}
+							canMoveToSquare(col+x, row+y);
 						}
 					}
+					clearAllMoves();
 					break;
 				case "queen":
 					// TODO
 					break;
 				case "test":
-					System.out.println("threatening all squares");
 					for (int x = 0; x < 8; x++) {
 						for (int y = 0; y < 8; y++) {
-							threatenSquare(x,y);
+							canMoveToSquare(x,y);
 						}
 					}
 					break;
@@ -279,15 +290,250 @@ public class Test extends JFrame{
 	public void clearAllMoves() {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				threatened[x][y] = false;
+				canMove[x][y] = false;
 			}
 		}
+		boardImage.clearThreat();
 	}
 	
 	public void calculateAllMoves() {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				calculateMovesFrom(x, y);
+			}
+		}
+	}
+	
+	public void calculateCapturesFrom(int col, int row) {
+		if(getPieceAt(col, row) != null) {
+			String type = getPieceAt(col, row).get_piece_type();
+			int color = getPieceAt(col, row).get_color();
+			
+			switch(type) {
+			case "pawn":
+				if(color == 0) {
+					if(col+1 < 8 && row+1 < 8) {
+						whiteCanCapture(col+1,row+1);
+					}
+					if(col+1 < 8 && row-1 >= 0) {
+						whiteCanCapture(col+1,row-1);
+					}
+				} else {
+					if(col-1 >= 0 && row+1 < 8) {
+						blackCanCapture(col-1,row+1);
+					}
+					if(col-1 >= 0 && row-1 >= 0) {
+						blackCanCapture(col-1,row-1);
+					}
+				}
+				break;
+			/*	
+			case "rook":
+				for (int x = col+1; x < 8; x++) {
+					if (getPieceAt(x, row) != null && getPieceAt(x, row).get_color() == color) {
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(x, row);
+						System.out.println("white can capture " + x + " " + row);
+					} else {
+						blackCanCapture(x, row);
+					}
+					if (getPieceAt(x, row) != null) {
+						break;
+					}
+				}
+				for (int y = row+1; y < 8; y++) {
+					if (getPieceAt(col,y) != null && getPieceAt(col,y).get_color() == color) {
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(col, y);
+						System.out.println("white can capture " + col + " " + y);
+					} else {
+						blackCanCapture(col, y);
+					}
+					if (getPieceAt(col,y) != null) {
+						break;
+					}
+				}
+				for (int x = col-1; x >= 0; x--) {
+					if (getPieceAt(x, row) != null && getPieceAt(x, row).get_color() == color) {
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(x, row);
+						System.out.println("white can capture " + x + " " + row);
+					} else {
+						blackCanCapture(x, row);
+					}
+					if (getPieceAt(x, row) != null) {
+						break;
+					}
+				}
+				for (int y = row-1; y >= 0; y--) {
+					if (getPieceAt(col,y) != null && getPieceAt(col,y).get_color() == color) {
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(col, y);
+						System.out.println("white can capture " + col + " " + y);
+					} else {
+						blackCanCapture(col, y);
+					}
+					if (getPieceAt(col,y) != null) {
+						break;
+					}
+				}
+				break;
+				
+			case "knight":
+				// TODO
+				break;*/ 
+			case "bishop":
+				int i = 1;
+				while (true) { // will break out
+					if(col+i >= 8 || row+i >= 8) {
+						System.out.println("1out of range");
+						System.out.println("loop 1; i = " + i);
+						break;
+					}
+					if(getPieceAt(col+i, row+i) != null && getPieceAt(col+i, row+i).get_color() == color) {
+						System.out.println("1same piece in the way");
+						System.out.println("loop 1; i = " + i);
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(col+i, row+i);
+						System.out.println("1White can capture " + (col+i) + " " + (row+i));
+						System.out.println("loop 1; i = " + i);
+					} else {
+						blackCanCapture(col+i, row+i);
+					}
+					if (getPieceAt(col+i, row+i) != null) {
+						System.out.println("1there is a black piece there");
+						System.out.println("loop 1; i = " + i);
+						break;
+					}
+					i++;
+				}
+				i = 1;
+				while (true) {
+					if(col-i < 0 || row-i < 0) {
+						System.out.println("2out of range");
+						break;
+					}
+					if(getPieceAt(col-i, row-i) != null && getPieceAt(col-i, row-i).get_color() == color) {
+						System.out.println("2same piece in the way");
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(col-i, row-i);
+						System.out.println("2White can capture " + (col-i) + " " + (row-i)); 
+					} else {
+						blackCanCapture(col-i, row-i);
+					}
+					if (getPieceAt(col-i, row-i) != null) {
+						System.out.println("2there is a black piece there");
+						break;
+					}
+					System.out.println("loop 2; i = " + i);
+					i++;
+				}
+				i = 1;
+				while (true) {
+					if((col-i) < 0 || (row+i) >= 8) {
+						System.out.println("3out of range");
+						break;
+					}
+					if(getPieceAt(col-i, row+i) != null && getPieceAt(col-i, row+i).get_color() == color) {
+						System.out.println("3same piece in the way");
+						break;
+					}
+					if (color == 0) {
+						whiteCanCapture(col-i, row+i);
+						System.out.println("3White can capture " + (col-i) + " " + (row+i)); 
+					} else {
+						blackCanCapture(col-i, row+i);
+					}
+					if (getPieceAt(col-i, row+i) != null) {
+						System.out.println("3there is a black piece there");
+						break;
+					}
+					System.out.println("loop 3; i = " + i);
+					i++;
+				}
+				i = 1;
+				while (true) {
+					if(col+i >= 8 || row-i < 0) {
+						System.out.println("4out of range");
+						break;
+					}
+					if(getPieceAt(col+i, row-i) != null && getPieceAt(col+i, row-i).get_color() == color) {
+						System.out.println("4same piece in the way");
+						break;
+					}
+					if (color == 0) {
+						System.out.println("4White can capture " + (col+i) + " " + (row-i)); 
+						whiteCanCapture(col+i, row-i);
+					} else {
+						blackCanCapture(col+i, row-i);
+					}
+					if (getPieceAt(col+i, row-i) != null) {
+						System.out.println("4there is a black piece there");
+						break;
+					}
+					System.out.println("loop 4; i = " + i);
+					i++;
+				}
+				System.out.println("Done with bishop");
+				break;
+			/*case "king":
+				// TODO
+				for (int x = -1; x <= 1; x++) {
+					for (int y = -1; y <=1; y++) {
+						if (col+x >= 8 || row+y >= 8 || col+x < 0 || row+y < 0) { // don't got outside board
+							continue;
+						}
+						if (getPieceAt(col+x,row+y) != null && getPieceAt(col+x,row+y).get_color() == color) { // don't select squares with pieces of the same color
+							continue;
+						}
+						if (color == 0) {
+							whiteCanCapture(col+x, row+y);
+						} else {
+							blackCanCapture(col+x, row+y);
+						}
+					}
+				}
+				break;
+			case "queen":
+				// TODO
+				break;
+			case "test":
+				System.out.println("threatening all squares");
+				for (int x = 0; x < 8; x++) {
+					for (int y = 0; y < 8; y++) {
+						canMoveToSquare(x,y);
+					}
+				}
+				break; */
+				
+			} 
+		}
+	}
+	
+	public void calculateAllCaptures(int color) { // whose turn it was BEFORE
+		if (color == 0) {
+			resetWhiteCanCapture();
+		} else {
+			resetBlackCanCapture();
+		}
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				if (getPieceAt(x,y) != null && getPieceAt(x,y).get_color() == color) {
+					System.out.println("Calculate captures from " + x + ", " + y);
+					calculateCapturesFrom(x, y);
+				}
 			}
 		}
 	}
@@ -303,51 +549,58 @@ public class Test extends JFrame{
 		return new int[]{-1,-1};
 	}
 	
-	public boolean checkForCheckmate() {
-		calculateAllMoves();
-		int[] kingCord = findKing(turns%2);
+	public boolean checkForCheckmate(int color) { // whose turn it was BEFORE
+		calculateAllCaptures(color);
+		int[] kingCord = findKing((turns+1)%2);
 		for (int x = -1; x <= 1; x++) {
 			for(int y = -1; y <= 1; y++) {
 				if (kingCord[0]+x < 0 || kingCord[1]+y < 0 || kingCord[0]+x >= 8 || kingCord[1]+y >= 8) {
 					continue;
 				}
-				if(!threatened[kingCord[0]+x][kingCord[1]+y]) {
-					clearThreat();
+				if(color == 0 && !whiteInCheck[kingCord[0]+x][kingCord[1]+y]) {
+					return false;
+				}
+				if(color == 1 && !blackInCheck[kingCord[0]+x][kingCord[1]+y]) {
 					return false;
 				}
 			}
 		}
-		clearThreat();
 		return true; 
 	}
 	
-	public boolean checkForCheck() {
-		calculateAllMoves();
-		int[] kingCord = findKing(turns%2);
+	public boolean checkForCheck(int color) { // whose turn it was BEFORE
+		calculateAllCaptures(color);
+		int[] kingCord = findKing((turns+1)%2);
+		System.out.print("King is at " + kingCord[0] + ", " + kingCord[1]);
 		if (kingCord[0] < 0 || kingCord[1] < 0 || kingCord[0] >= 8 || kingCord[1] >= 8) {
 			return false;
 		} // this shouldn't happen, because the king has to exist
-		boolean result = threatened[kingCord[0]][kingCord[1]];
-		clearThreat();
-		return result;
+		if (color == 0) {
+			return whiteInCheck[kingCord[0]][kingCord[1]];
+		} else {
+			return blackInCheck[kingCord[0]][kingCord[1]];
+		}
+		
 	}
 	
 	public void endMove() {
 		clearAllMoves();
 		deselectSquare();
 		
-		if(checkForCheckmate()) {
+		if(checkForCheckmate(turns%2)) {
 			if (turns%2 == 0) { // it was white's turn - white wins
 				whiteWins();
 			} else {
 				blackWins();
 			}
-		} else if (checkForCheck()) { // the king is in check!
+		} else if (checkForCheck(turns%2)) { // the king is in check!
 			if (turns%2 == 0) { // it was white's turn - black is in check
 				blackInCheck();
 			} else {
 				whiteInCheck();
 			}
+		} else {
+			clearCheck();
 		}
 		turns++;
 	}
@@ -355,7 +608,6 @@ public class Test extends JFrame{
 	public void add_piece(chess_piece piece, int col, int row) {
 		pieces[col][row] = piece;
 		boardImage.add_piece(piece, col, row);
-		System.out.println(getPieceAt(col,row).get_color());
 	}
 	
 	public void move_piece(int col1, int row1, int col2, int row2) {
@@ -382,22 +634,41 @@ public class Test extends JFrame{
 		pieceSelected = false;
 		selectedCol = -1;
 		selectedRow = -1;
-		clearThreat();
+		clearAllMoves();
 	}
 	
-	public void threatenSquare(int col, int row) {
-		threatened[col][row] = true;
-		boardImage.threatenSquare(col, row);
+	public void canMoveToSquare(int col, int row) {
+		canMove[col][row] = true;
+		boardImage.canMoveToSquare(col, row);
 	}
 	
-	public void clearThreat() {
+	public void whiteCanCapture(int col, int row) {
+		blackInCheck[col][row] = true;
+		boardImage.whiteCanCaptureSquare(col, row);
+	}
+	
+	public void resetWhiteCanCapture() {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				threatened[x][y] = false;
+				blackInCheck[x][y] = false;
 			}
 		}
-		boardImage.clearThreat();
-		System.out.println("Cleared threat");
+		boardImage.resetWhiteCanCapture();
+		System.out.println("resetted whiteCanCapture");
+	}
+	
+	public void blackCanCapture(int col, int row) {
+		whiteInCheck[col][row] = true;
+		boardImage.blackCanCaptureSquare(col, row);
+	}
+	
+	public void resetBlackCanCapture() {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				whiteInCheck[x][y] = false;
+			}
+		}
+		boardImage.resetBlackCanCapture();
 	}
 	
 	public void whiteInCheck() {
@@ -414,5 +685,9 @@ public class Test extends JFrame{
 	
 	public void blackWins() {
 		boardImage.blackWins();
+	}
+	
+	public void clearCheck() {
+		boardImage.clearCheck();
 	}
 }

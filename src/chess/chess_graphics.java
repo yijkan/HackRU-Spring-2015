@@ -9,13 +9,15 @@ import processing.core.*;
 
 public class chess_graphics extends PApplet {
 	private PImage[][] pieces = new PImage[8][8];
-	private boolean[][] threatened = new boolean[8][8];
+	private boolean[][] canMove = new boolean[8][8];
+	private boolean[][] whiteCanCap = new boolean[8][8];
+	private boolean[][] blackCanCap = new boolean[8][8];
 	private int sqDim = 50; // the dimensions of each square; depends on image dimensions
 	private int winWidth = 8*sqDim + 400; // the width of the window
-	private int winHeight = 8*sqDim + 100; // the height of the window
+	private int winHeight = 8*sqDim + 200; // the height of the window
 	private int highlightedX = 10000; // off screen
 	private int highlightedY = 10000; // off screen
-	private int status = -1; 
+	private String status = "";
 	/*
 	 * -1 means nothing
 	 * 0 means white in check
@@ -26,38 +28,48 @@ public class chess_graphics extends PApplet {
 	
 	public void setup() {
 		size(winWidth, winHeight);
-		background(255);
 	}
 	
 	public void draw() {
+		background(255);
 		fill(0);
 		textSize(20);
 		text("Player 1", 25, 50);
 		text("Player 2", winWidth - 100, 50);
 
 		// create all of the black squares
-		fill (10);
+		fill (255, 0,0) ;
 		for (int x = 200; x <= winWidth - 250; x += sqDim * 2) {
-			for (int y = 75; y <= winHeight - 75; y += sqDim * 2) {
+			for (int y = 75; y <= winHeight - 175; y += sqDim * 2) {
 				rect(x,y,sqDim,sqDim);
 				rect(x+sqDim,y+sqDim,sqDim,sqDim);
 			}
 		}
 
 		// create all of the white squares
-		fill (245);
+		fill (205);
 		for (int x = 200 + sqDim; x <= winWidth - 250; x += sqDim * 2) {
-			for (int y = 75; y <= winHeight - 75; y += sqDim * 2) {
+			for (int y = 75; y <= winHeight - 175; y += sqDim * 2) {
 				rect(x,y,sqDim,sqDim);
 				rect(x-sqDim,y+sqDim,sqDim,sqDim);
 			}
 		}
 		
-		//draw threatened squares
+		//draw can-move squares
 		fill(128);
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				if(threatened[x][y]) {
+				if(canMove[x][y]) {
+					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
+				}
+			}
+		}
+		
+		//draw can-capture squares
+		fill(255);
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				if(whiteCanCap[x][y]) {
 					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
 				}
 			}
@@ -81,19 +93,9 @@ public class chess_graphics extends PApplet {
 //		image (i, 200, 75);
 		
 		// status message
-		String mess = "";
-		if(status == 0) {
-			mess = "The white king is in check!";
-		} else if (status == 1) {
-			mess = "The black king is in check!";
-		} else if (status == 2) {
-			mess = "White wins!";
-		} else if (status == 3) {
-			mess = "Black wins!";
-		}
 		fill(255,0,0);
 		textSize(20);
-		text(mess, 650, 400);
+		text(status, 250, 525);
 	}
 	
 	public void add_piece(chess_piece piece, int col, int row) {
@@ -111,14 +113,38 @@ public class chess_graphics extends PApplet {
 		pieces[col][row] = null;
 	}
 	
-	public void threatenSquare(int col, int row) {
-		threatened[col][row] = true;
+	public void canMoveToSquare(int col, int row) {
+		canMove[col][row] = true;
+	}
+	
+	public void whiteCanCaptureSquare(int col, int row) {
+		whiteCanCap[col][row] = true;
+	}
+	
+	public void resetWhiteCanCapture() {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				whiteCanCap[x][y] = false;
+			}
+		}
+	}
+	
+	public void blackCanCaptureSquare(int col, int row) {
+		blackCanCap[col][row] = true;
+	}
+	
+	public void resetBlackCanCapture() {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				blackCanCap[x][y] = false;
+			}
+		}
 	}
 	
 	public void clearThreat() {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				threatened[x][y] = false;
+				canMove[x][y] = false;
 			}
 		}
 	}
@@ -133,19 +159,23 @@ public class chess_graphics extends PApplet {
 		highlightedY = 10000;
 	}
 	
+	public void clearCheck() {
+		status = "";
+	}
+	
 	public void whiteInCheck() {
-		status = 0;
+		status = "The white king is in check!";
 	}
 	
 	public void blackInCheck() {
-		status = 1;
+		status = "The black king is in check!";
 	}
 	
 	public void whiteWins() {
-		status = 2;
+		status = "White wins!";
 	}
 	
 	public void blackWins() {
-		status = 3;
+		status = "Black wins!";
 	}
 }
