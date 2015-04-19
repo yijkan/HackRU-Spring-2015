@@ -816,7 +816,11 @@ public class Chess extends JFrame{
 		}
 		return true; 
 	}
-	
+	/**
+	 * 
+	 * @param color whose turn it was BEFORE the move. the opposite of the king to look for
+	 * @return
+	 */
 	public boolean checkForCheck(int color) { // whose turn it was BEFORE
 		calculateAllCaptures(color);
 		int[] kingCord = findKing((turns+1)%2);
