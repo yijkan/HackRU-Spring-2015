@@ -17,7 +17,9 @@ public class Chessboard extends PApplet {
 	private int winHeight = 8*sqDim + 200; // the height of the window
 	private int highlightedX = 10000; // off screen
 	private int highlightedY = 10000; // off screen
-	private String status = "";
+	private String status = "Click here to start";
+	private int turn = -1;
+	
 	/*
 	 * -1 means nothing
 	 * 0 means white in check
@@ -36,6 +38,14 @@ public class Chessboard extends PApplet {
 		textSize(20);
 		text("Player 1", 25, 50);
 		text("Player 2", winWidth - 100, 50);
+		
+		// Mark whose turn it is
+		fill(255, 0, 0);
+		if (turn == 0) { // white's turn - player 1
+			ellipse(55,75,10,10);
+		} else if (turn == 1) { // black's turn - player 2
+			ellipse(winWidth - 60, 75, 10, 10);
+		}
 
 		// create all of the black squares
 		fill (255, 0,0) ;
@@ -70,6 +80,15 @@ public class Chessboard extends PApplet {
 //		for (int x = 0; x < 8; x++) {
 //			for (int y = 0; y < 8; y++) {
 //				if(whiteCanCap[x][y]) {
+//					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
+//				}
+//			}
+//		}
+		
+//		fill(0);
+//		for (int x = 0; x < 8; x++) {
+//			for (int y = 0; y < 8; y++) {
+//				if(blackCanCap[x][y]) {
 //					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
 //				}
 //			}
@@ -159,6 +178,15 @@ public class Chessboard extends PApplet {
 		highlightedY = 10000;
 	}
 	
+	public void startGame() {
+		status = "";
+		turn = 0;
+	}
+	
+	public void turn(int turns) {
+		this.turn = turns%2;
+	}
+	
 	public void clearCheck() {
 		status = "";
 	}
@@ -173,9 +201,11 @@ public class Chessboard extends PApplet {
 	
 	public void whiteWins() {
 		status = "White wins!";
+		turn = -1;
 	}
 	
 	public void blackWins() {
 		status = "Black wins!";
+		turn = -1;
 	}
 }
