@@ -5,8 +5,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class Test extends JFrame{
-	private chess_graphics boardImage;
+public class Chess extends JFrame{
+	private Chessboard boardImage;
 	private chess_piece[][] pieces = new chess_piece[8][8];
 	private boolean[][] canMove = new boolean[8][8]; // if a specific piece can move here OR if any piece can move here
 	private boolean[][] whiteInCheck = new boolean[8][8];
@@ -19,13 +19,13 @@ public class Test extends JFrame{
 	
 	public static void main(String[] args) {
 		// this is all testing stuff for now
-		Test test = new Test();
+		Chess game = new Chess();
 		// TODO remove test piece once we're done with it
 //		chess_piece testPiece = new chess_piece("bishop", 0);
 //		test.add_piece(testPiece, 0, 0); 
 	}
 	
-	public Test() {
+	public Chess() {
 		super("Testing chess"); // opens a JFrame
 		setSize(800, 550);
 		setResizable(false);
@@ -34,7 +34,7 @@ public class Test extends JFrame{
 		c.setLayout(new BoxLayout(c, BoxLayout.PAGE_AXIS));
 		c.setBackground(new Color(255,255,255));
 		
-		boardImage = new chess_graphics();
+		boardImage = new Chessboard();
 		c.add(boardImage, BorderLayout.NORTH);
 		
 		boardImage.addMouseListener(new MouseAdapter() {
@@ -109,7 +109,7 @@ public class Test extends JFrame{
 		}
 	}
 	
-	public chess_graphics getBoard() {
+	public Chessboard getBoard() {
 		return boardImage;
 	}
 	
@@ -259,19 +259,23 @@ public class Test extends JFrame{
 					calculateAllCaptures((color+1)%2);
 					for (int x = -1; x <= 1; x++) {
 						for (int y = -1; y <=1; y++) {
+							System.out.print("checking king's move to " + (col+x) + " " + (row+y) + " ");
 							if (col+x >= 8 || row+y >= 8 || col+x < 0 || row+y < 0) { // don't got outside board
+								System.out.println("!Outside board");
 								continue;
 							}
 							if (getPieceAt(col+x,row+y) != null && getPieceAt(col+x,row+y).get_color() == color) { // don't select squares with pieces of the same color
+								System.out.println("!same piece");
 								continue;
 							}
-							if (color == 0 && whiteInCheck[col+x][row+y] || color == 1 && blackInCheck[col+x][row+y]) {
+							if ((color == 0 && whiteInCheck[col+x][row+y]) || (color == 1 && blackInCheck[col+x][row+y])) {
+								System.out.println("!check");
 								continue;
 							}
+							System.out.println("Can move to " + (col+x) + " " + (row+y));
 							canMoveToSquare(col+x, row+y);
 						}
 					}
-					clearAllMoves();
 					break;
 				case "queen":
 					// TODO
@@ -327,7 +331,6 @@ public class Test extends JFrame{
 					}
 				}
 				break;
-			/*	
 			case "rook":
 				for (int x = col+1; x < 8; x++) {
 					if (getPieceAt(x, row) != null && getPieceAt(x, row).get_color() == color) {
@@ -389,7 +392,7 @@ public class Test extends JFrame{
 				
 			case "knight":
 				// TODO
-				break;*/ 
+				break;
 			case "bishop":
 				int i = 1;
 				while (true) { // will break out
@@ -488,7 +491,7 @@ public class Test extends JFrame{
 				}
 				System.out.println("Done with bishop");
 				break;
-			/*case "king":
+			case "king":
 				// TODO
 				for (int x = -1; x <= 1; x++) {
 					for (int y = -1; y <=1; y++) {
@@ -516,7 +519,7 @@ public class Test extends JFrame{
 						canMoveToSquare(x,y);
 					}
 				}
-				break; */
+				break; 
 				
 			} 
 		}
@@ -584,7 +587,6 @@ public class Test extends JFrame{
 	}
 	
 	public void endMove() {
-		clearAllMoves();
 		deselectSquare();
 		
 		if(checkForCheckmate(turns%2)) {

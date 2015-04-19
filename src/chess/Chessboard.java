@@ -7,7 +7,7 @@ import processing.core.*;
  * Find the folder where the project is located and choose processing-core.jar
  */
 
-public class chess_graphics extends PApplet {
+public class Chessboard extends PApplet {
 	private PImage[][] pieces = new PImage[8][8];
 	private boolean[][] canMove = new boolean[8][8];
 	private boolean[][] whiteCanCap = new boolean[8][8];
@@ -66,14 +66,14 @@ public class chess_graphics extends PApplet {
 		}
 		
 		//draw can-capture squares
-		fill(255);
-		for (int x = 0; x < 8; x++) {
-			for (int y = 0; y < 8; y++) {
-				if(whiteCanCap[x][y]) {
-					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
-				}
-			}
-		}
+//		fill(255);
+//		for (int x = 0; x < 8; x++) {
+//			for (int y = 0; y < 8; y++) {
+//				if(whiteCanCap[x][y]) {
+//					rect(x * sqDim + 200, y * sqDim + 75, sqDim, sqDim);
+//				}
+//			}
+//		}
 		
 		// draw highlighted square
 		fill (0,0,255);
